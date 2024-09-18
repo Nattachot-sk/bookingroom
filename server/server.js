@@ -6,8 +6,10 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const salt = 10;
+const env =require("dotenv")
 
 const app = express();
+env.config()
 app.use(express.json());
 app.use(
   cors({
@@ -48,10 +50,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
+  host: `${process.env.HOST}`,
+  user: `${process.env.USER}`,
   password: "",
-  database: "bookingroom_system",
+  database: `${process.env.DATABASE}`,
 });
 
 const verifyUser = (req, res, next) => {
@@ -819,6 +821,6 @@ app.delete(`/deleteaccess/:id`, (req, res) => {
 
 // Report //
 
-app.listen(8081, () => {
+app.listen(process.env.PORT , () => {
   console.log("Running...");
 });
