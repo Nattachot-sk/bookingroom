@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const salt = 10;
 const env =require("dotenv")
 
+
 const app = express();
 env.config()
 app.use(express.json());
@@ -53,6 +54,7 @@ const db = mysql.createConnection({
   host: `${process.env.HOST}`,
   user: `${process.env.USER}`,
   password: "",
+  port:"3305",
   database: `${process.env.DATABASE}`,
 });
 

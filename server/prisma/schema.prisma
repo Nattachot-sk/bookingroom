@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String
+  firstname String
+  lastname String
+  phonenumber String
+  department String
+  role Role @default(user)
+
+  booking Booking[] @relation()
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+enum Role {
+  user
+  admin
+}
+
+
+model Room {
+  id Int @id @default(autoincrement())
+  room_name String
+  room_amonut Int
+  room_location String
+  image String
+  status_room Statusroom @default(open)
+
+  booking Booking[] @relation()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+enum Statusroom {
+  open
+  off
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+  telnumber String
+  people_amount Int
+  description String
+  date String
+  dateend String
+  time DateTime
+  timeend DateTime
+  status StatusBooking @default(free)
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  roomId Int
+  room Room @relation(fields: [roomId], references: [id])
+  agencyId Int
+  agency Agency @relation(fields: [agencyId], references: [id])
+  accessorieId Int
+  acccesorie Accessorie @relation(fields: [accessorieId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum StatusBooking {
+  booking
+  free
+}
+
+model Agency{
+  id Int @id @default(autoincrement())
+  name String
+  booking Booking[] @relation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Accessorie{
+  id Int @id @default(autoincrement())
+  name String
+  amount Int
+  booking Booking[] @relation
+    createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
